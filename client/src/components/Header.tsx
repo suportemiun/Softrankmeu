@@ -22,13 +22,15 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "group block select-none space-y-3 rounded-lg p-4 leading-none no-underline outline-none transition-all duration-200 hover:bg-gradient-to-r hover:from-primary/5 hover:to-primary/10 hover:scale-[1.02] focus:bg-gradient-to-r focus:from-primary/5 focus:to-primary/10 border border-transparent hover:border-primary/20",
             className
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground bg-white/10 p-2 rounded-md border border-white/20">
+          <div className="text-base font-semibold leading-none text-foreground group-hover:text-primary transition-colors duration-200">
+            {title}
+          </div>
+          <p className="line-clamp-2 text-sm leading-relaxed text-foreground/80 bg-gradient-to-r from-primary/10 to-primary/5 p-3 rounded-md border border-primary/20 group-hover:from-primary/15 group-hover:to-primary/10 group-hover:border-primary/30 transition-all duration-200">
             {children}
           </p>
         </a>
@@ -52,9 +54,11 @@ export default function Header() {
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Serviços</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="bg-transparent hover:bg-white/10 data-[state=open]:bg-white/15 text-foreground font-medium transition-all duration-200">
+                Serviços
+              </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[250px] p-4">
+                <ul className="grid w-[300px] p-6 bg-background/95 backdrop-blur-sm border border-border/50 shadow-xl rounded-lg">
                   <ListItem href="/order" title="League of Legends">
                     Subir Meu Elo
                   </ListItem>
