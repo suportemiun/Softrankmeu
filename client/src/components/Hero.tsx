@@ -11,7 +11,7 @@ export default function Hero() {
             <h1 className="text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
               Elojob profissional. 
               <span className="block">Rápido. Seguro.</span>
-              <span className="block text-accent">Softrank.</span>
+              <span className="block">Softrank.</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
               Serviço premium de Elojob para League of Legends — profissionais verificados, 
@@ -39,15 +39,15 @@ export default function Hero() {
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-foreground rounded-full"></div>
               <span>Pagamento seguro</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-foreground rounded-full"></div>
               <span>Proteção ao comprador</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-foreground rounded-full"></div>
               <span>Garantia de progresso</span>
             </div>
           </div>

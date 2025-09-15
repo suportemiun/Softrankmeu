@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
-import PriceCalculator from "@/components/PriceCalculator";
+import OrderCalculator from "@/components/OrderCalculator";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       <Hero />
       <Features />
       <HowItWorks />
-      <PriceCalculator />
+      <OrderCalculator />
       <Footer />
     </div>
   );
