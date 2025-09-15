@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { ShieldCheck, Award, Zap } from "lucide-react";
+import challengerRank from "@assets/Season_2022_-_Challenger_1757959424033.png";
 
 export default function Hero() {
   const [, setLocation] = useLocation();
@@ -48,6 +49,17 @@ export default function Hero() {
       animate="visible"
     >
       <div className="flex flex-col items-center justify-center max-w-5xl mx-auto px-6 text-center py-24 sm:py-32 lg:py-40">
+        <motion.div
+          variants={itemVariants}
+          className="mb-4"
+        >
+          <img 
+            src={challengerRank} 
+            alt="Challenger Rank"
+            className="w-16 h-16 mx-auto object-contain"
+          />
+        </motion.div>
+
         <motion.div
           variants={itemVariants}
           className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-wider text-foreground"
