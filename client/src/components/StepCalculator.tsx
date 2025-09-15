@@ -30,8 +30,22 @@ export default function StepCalculator() {
     { name: "Grão Mestre", price: 500, divisions: [], image: grandmasterRank },
     { name: "Desafiante", price: 1000, divisions: [], image: challengerRank },
   ];
+  
+  const regions = [
+    { name: "China", abbreviation: "LPL" },
+    { name: "Coreia do Sul", abbreviation: "LCK" },
+    { name: "Europa", abbreviation: "LEC" },
+    { name: "Liga das Américas", abbreviation: "LTA" },
+    { name: "Liga do Pacífico", abbreviation: "LCP" },
+  ];
+  const ltaConferences = [
+    { name: "Norte", location: "Los Angeles" },
+    { name: "Sul", location: "São Paulo" },
+  ];
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [ltaConference, setLtaConference] = useState("");
   const [currentTier, setCurrentTier] = useState("");
   const [currentDiv, setCurrentDiv] = useState("");
   const [desiredTier, setDesiredTier] = useState("");
@@ -141,15 +155,16 @@ export default function StepCalculator() {
 
     setPrice(total);
     setBreakdown(details);
-    setCurrentStep(5);
+    setCurrentStep(6);
   };
 
   const steps = [
-    { number: 1, title: "Rank Atual", completed: !!(currentTier && (tiers.find(t => t.name === currentTier)?.divisions.length === 0 || currentDiv)) },
-    { number: 2, title: "Rank Desejado", completed: !!(desiredTier && (tiers.find(t => t.name === desiredTier)?.divisions.length === 0 || desiredDiv)) },
-    { number: 3, title: "Serviços Extras", completed: true },
-    { number: 4, title: "Revisar", completed: !!(currentTier && desiredTier) },
-    { number: 5, title: "Resultado", completed: price !== null }
+    { number: 1, title: "Região", completed: !!selectedRegion && (selectedRegion !== "Liga das Américas" || !!ltaConference) },
+    { number: 2, title: "Rank Atual", completed: !!(currentTier && (tiers.find(t => t.name === currentTier)?.divisions.length === 0 || currentDiv)) },
+    { number: 3, title: "Rank Desejado", completed: !!(desiredTier && (tiers.find(t => t.name === desiredTier)?.divisions.length === 0 || desiredDiv)) },
+    { number: 4, title: "Serviços Extras", completed: true },
+    { number: 5, title: "Revisar", completed: !!(currentTier && desiredTier) },
+    { number: 6, title: "Resultado", completed: price !== null }
   ];
 
   const currentTierData = tiers.find(t => t.name === currentTier);
@@ -186,6 +201,74 @@ export default function StepCalculator() {
   );
 
   const renderStep1 = () => (
+    <Card className="max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">Selecione a Região do Serviço</CardTitle>
+        <p className="text-muted-foreground text-center">
+          Onde sua conta de League of Legends está localizada?
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {regions.map((region) => (
+            <div
+              key={region.name}
+              className={`p-4 border rounded-lg cursor-pointer hover-elevate transition-all flex items-center justify-center h-24 ${
+                selectedRegion === region.name ? 'border-foreground bg-muted' : 'border-border'
+              }`}
+              onClick={() => {
+                setSelectedRegion(region.name);
+                if (region.name !== "Liga das Américas") {
+                  setLtaConference("");
+                }
+              }}
+              data-testid={`region-${region.abbreviation.toLowerCase()}`}
+            >
+              <div className="text-center">
+                <div className="font-medium text-sm">{region.name}</div>
+                <div className="text-xs text-muted-foreground">{region.abbreviation}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {selectedRegion === "Liga das Américas" && (
+          <div className="space-y-4 pt-4 border-t">
+            <h3 className="text-lg font-medium text-center">Selecione a Conferência (LTA)</h3>
+            <div className="flex justify-center gap-4">
+              {ltaConferences.map((conf) => (
+                <Button
+                  key={conf.name}
+                  variant={ltaConference === conf.name ? "default" : "outline"}
+                  size="lg"
+                  onClick={() => setLtaConference(conf.name)}
+                  className="text-lg py-6 px-8 flex flex-col h-auto"
+                  data-testid={`lta-conf-${conf.name.toLowerCase()}`}
+                >
+                  <span>{conf.name}</span>
+                  <span className="text-xs font-normal text-muted-foreground">{conf.location}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-center">
+          <Button 
+            size="lg" 
+            onClick={() => setCurrentStep(2)}
+            disabled={!steps[0].completed}
+            className="px-12 py-6 text-lg"
+            data-testid="button-next-step1"
+          >
+            Próximo
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderStep2 = () => (
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Selecione seu Rank Atual</CardTitle>
@@ -244,13 +327,22 @@ export default function StepCalculator() {
           </div>
         )}
 
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
+           <Button 
+            variant="outline"
+            size="lg" 
+            onClick={() => setCurrentStep(1)}
+            className="px-12 py-6 text-lg"
+            data-testid="button-back-step2"
+          >
+            Voltar
+          </Button>
           <Button 
             size="lg" 
-            onClick={() => setCurrentStep(2)}
-            disabled={!steps[0].completed}
+            onClick={() => setCurrentStep(3)}
+            disabled={!steps[1].completed}
             className="px-12 py-6 text-lg"
-            data-testid="button-next-step1"
+            data-testid="button-next-step2"
           >
             Próximo
           </Button>
@@ -259,7 +351,7 @@ export default function StepCalculator() {
     </Card>
   );
 
-  const renderStep2 = () => (
+  const renderStep3 = () => (
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Selecione seu Rank Desejado</CardTitle>
@@ -322,18 +414,18 @@ export default function StepCalculator() {
           <Button 
             variant="outline"
             size="lg" 
-            onClick={() => setCurrentStep(1)}
+            onClick={() => setCurrentStep(2)}
             className="px-12 py-6 text-lg"
-            data-testid="button-back-step2"
+            data-testid="button-back-step3"
           >
             Voltar
           </Button>
           <Button 
             size="lg" 
-            onClick={() => setCurrentStep(3)}
-            disabled={!steps[1].completed}
+            onClick={() => setCurrentStep(4)}
+            disabled={!steps[2].completed}
             className="px-12 py-6 text-lg"
-            data-testid="button-next-step2"
+            data-testid="button-next-step3"
           >
             Próximo
           </Button>
@@ -342,7 +434,7 @@ export default function StepCalculator() {
     </Card>
   );
 
-  const renderStep3 = () => (
+  const renderStep4 = () => (
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Serviços Extras</CardTitle>
@@ -414,17 +506,17 @@ export default function StepCalculator() {
           <Button 
             variant="outline"
             size="lg" 
-            onClick={() => setCurrentStep(2)}
+            onClick={() => setCurrentStep(3)}
             className="px-12 py-6 text-lg"
-            data-testid="button-back-step3"
+            data-testid="button-back-step4"
           >
             Voltar
           </Button>
           <Button 
             size="lg" 
-            onClick={() => setCurrentStep(4)}
+            onClick={() => setCurrentStep(5)}
             className="px-12 py-6 text-lg"
-            data-testid="button-next-step3"
+            data-testid="button-next-step4"
           >
             Revisar
           </Button>
@@ -433,7 +525,7 @@ export default function StepCalculator() {
     </Card>
   );
 
-  const renderStep4 = () => (
+  const renderStep5 = () => (
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Revisar Pedido</CardTitle>
@@ -442,10 +534,20 @@ export default function StepCalculator() {
         </p>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Região</h3>
+            <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50 h-full">
+              <div className="text-center">
+                <div className="font-medium">{selectedRegion}</div>
+                {ltaConference && <div className="text-sm text-muted-foreground">Conferência {ltaConference}</div>}
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Rank Atual</h3>
-            <div className="flex items-center gap-4 p-4 border rounded-lg">
+            <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50 h-full">
               {currentTierData && (
                 <img 
                   src={currentTierData.image} 
@@ -462,7 +564,7 @@ export default function StepCalculator() {
 
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Rank Desejado</h3>
-            <div className="flex items-center gap-4 p-4 border rounded-lg">
+            <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50 h-full">
               {desiredTierData && (
                 <img 
                   src={desiredTierData.image} 
@@ -479,7 +581,7 @@ export default function StepCalculator() {
         </div>
 
         {(watchGames || gameReport || duoBoost) && (
-          <div className="space-y-4">
+          <div className="space-y-4 pt-6 border-t">
             <h3 className="font-semibold text-lg">Serviços Extras</h3>
             <div className="flex flex-wrap gap-2">
               {watchGames && <Badge variant="default">Assista aos jogos (+R$30)</Badge>}
@@ -493,9 +595,9 @@ export default function StepCalculator() {
           <Button 
             variant="outline"
             size="lg" 
-            onClick={() => setCurrentStep(3)}
+            onClick={() => setCurrentStep(4)}
             className="px-12 py-6 text-lg"
-            data-testid="button-back-step4"
+            data-testid="button-back-step5"
           >
             Voltar
           </Button>
@@ -512,7 +614,7 @@ export default function StepCalculator() {
     </Card>
   );
 
-  const renderStep5 = () => (
+  const renderStep6 = () => (
     <Card className="max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Resultado do Cálculo</CardTitle>
@@ -551,6 +653,8 @@ export default function StepCalculator() {
               setCurrentStep(1);
               setPrice(null);
               setBreakdown([]);
+              setSelectedRegion("");
+              setLtaConference("");
               setCurrentTier("");
               setCurrentDiv("");
               setDesiredTier("");
@@ -596,6 +700,7 @@ export default function StepCalculator() {
           {currentStep === 3 && renderStep3()}
           {currentStep === 4 && renderStep4()}
           {currentStep === 5 && renderStep5()}
+          {currentStep === 6 && renderStep6()}
         </div>
       </div>
     </section>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
+import lolGameplay from "@assets/generated_images/League_of_Legends_gameplay_hero_410af987.png";
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
@@ -28,7 +29,7 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground bg-white/10 p-2 rounded-md border border-white/20">
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
         </a>
@@ -54,9 +55,31 @@ export default function Header() {
             <NavigationMenuItem>
               <NavigationMenuTrigger>Serviços</NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[250px] p-4">
-                  <ListItem href="/order" title="League of Legends">
-                    Subir Meu Elo
+                <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                  <li className="row-span-3">
+                    <NavigationMenuLink asChild>
+                      <a
+                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        href="/order"
+                      >
+                        <img src={lolGameplay} alt="League of Legends Gameplay" className="mb-4 h-32 w-full object-cover rounded-md" />
+                        <div className="text-lg font-medium">
+                          League of Legends
+                        </div>
+                        <p className="text-sm leading-tight text-muted-foreground">
+                          Suba de elo com jogadores profissionais e melhore suas habilidades.
+                        </p>
+                      </a>
+                    </NavigationMenuLink>
+                  </li>
+                  <ListItem href="/order" title="Elo Boosting">
+                    Alcance o rank dos seus sonhos com nossos boosters.
+                  </ListItem>
+                  <ListItem href="/order" title="Duo Boosting">
+                    Jogue com um profissional e aprenda em tempo real.
+                  </ListItem>
+                  <ListItem href="/order" title="Coaching">
+                    Aulas particulares para aprimorar sua gameplay.
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
