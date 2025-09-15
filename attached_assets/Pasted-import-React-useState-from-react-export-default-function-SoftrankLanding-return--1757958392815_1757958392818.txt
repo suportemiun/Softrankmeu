@@ -1,0 +1,253 @@
+import React, { useState } from "react";
+
+export default function SoftrankLanding() {
+  return (
+    <div className="min-h-screen bg-white text-slate-900 antialiased">
+      {/* NAVBAR */}
+      <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="rounded-md bg-black text-white font-semibold px-3 py-2">SOFTRANK</div>
+          <nav className="hidden md:flex gap-6 text-sm font-medium text-slate-700">
+            <a href="#features" className="hover:underline">Recursos</a>
+            <a href="#how" className="hover:underline">Como funciona</a>
+            <a href="#calculator" className="hover:underline">Calculadora</a>
+            <a href="#support" className="hover:underline">Suporte</a>
+          </nav>
+        </div>
+        <div className="flex items-center gap-3">
+          <a href="#login" className="text-sm font-medium">Entrar</a>
+          <a href="#signup" className="ml-2 inline-flex items-center rounded-lg border border-black px-4 py-2 text-sm font-semibold">Cadastrar</a>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <main className="max-w-6xl mx-auto px-6 pt-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-12">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">Elojob profissional. Rápido. Seguro. Softrank.</h1>
+            <p className="mt-6 text-lg text-slate-600 max-w-xl">Serviço premium de Elojob para League of Legends — profissionais verificados, progresso garantido e suporte 24/7. Em breve: todos os jogos.</p>
+
+            <div className="mt-8 flex gap-4">
+              <a href="#calculator" className="inline-flex items-center justify-center rounded-full bg-black text-white px-6 py-3 font-semibold shadow">Quero subir de elo</a>
+              <a href="#how" className="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 font-semibold text-slate-700">Como funciona</a>
+            </div>
+
+            <div className="mt-6 text-sm text-slate-500">Pagamento seguro — Proteção ao comprador — Garantia de progresso</div>
+          </div>
+
+          <div className="flex justify-center md:justify-end">
+            <div className="w-[360px] h-[460px] rounded-3xl shadow-2xl border border-slate-100 p-6 flex flex-col justify-between">
+              <div>
+                <div className="text-sm text-slate-500">Melhor para</div>
+                <h3 className="mt-2 font-bold text-2xl">Subida ranqueada - League of Legends</h3>
+                <p className="mt-3 text-slate-600">Jogador profissional, coaching opcional e relatório pós-partida. Velocidade e segurança com verificação completa.</p>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-md bg-slate-100 px-3 py-1 text-xs font-medium">Exemplo</div>
+                  <div className="text-sm text-slate-500">Entrega em 3-7 partidas</div>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <div>
+                    <div className="text-2xl font-extrabold">R$ 89</div>
+                    <div className="text-xs text-slate-500">Preço de exemplo</div>
+                  </div>
+                  <button className="rounded-full bg-blue-600 text-white px-4 py-2 font-semibold">Pedir agora</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURES */}
+        <section id="features" className="py-12">
+          <div className="text-center">
+            <h2 className="text-3xl font-semibold">Por que escolher o Softrank?</h2>
+            <p className="mt-3 text-slate-600 max-w-2xl mx-auto">Foco em segurança, profissionais verificados, rastreabilidade e suporte humano. Nós cuidamos do processo — você aproveita os resultados.</p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <FeatureCard title="Verificados" desc="Todos os boosters passam por verificação de identidade e skill antes de aceitar serviços." />
+            <FeatureCard title="Proteção ao Comprador" desc="Reembolso parcial/total em casos verificáveis de violação do serviço." />
+            <FeatureCard title="Relatórios" desc="Receba vídeo e análise pós-serviço mostrando o progresso e pontos de melhoria." />
+          </div>
+        </section>
+
+        {/* HOW IT WORKS */}
+        <section id="how" className="py-12">
+          <div className="max-w-3xl mx-auto text-center">
+            <h3 className="text-2xl font-semibold">Como funciona em 3 passos</h3>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Step number={1} title="Escolha o serviço" desc="Selecione o modo, rank e extras (coaching, replay, etc)." />
+              <Step number={2} title="Pagamento seguro" desc="Pague com cartão ou boleto. O valor fica em custódia até a entrega." />
+              <Step number={3} title="Receba resultados" desc="Verifique o relatório e libere o pagamento. Suporte 24/7 disponível." />
+            </div>
+          </div>
+        </section>
+
+        {/* CALCULATOR */}
+        <section id="calculator" className="py-12">
+          <div className="text-center">
+            <h3 className="text-2xl font-semibold">Calculadora de Preços</h3>
+            <p className="mt-2 text-slate-600">Escolha seu tier atual e o tier desejado para calcular o valor. Divisões vão do IV ao I (decrescente).</p>
+          </div>
+
+          <div className="mt-8 max-w-xl mx-auto">
+            <PriceCalculator />
+          </div>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="mt-16 border-t pt-8 pb-20 text-sm text-slate-600">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between">
+            <div>
+              <div className="font-semibold">SOFTRANK</div>
+              <div className="mt-3 max-w-md">Softrank — Elojob profissional. Em breve: mais jogos. © {new Date().getFullYear()}</div>
+            </div>
+            <div className="mt-6 md:mt-0 flex gap-8">
+              <div>
+                <div className="font-medium">Empresa</div>
+                <div className="mt-2">Sobre • Carreiras • Política de Privacidade</div>
+              </div>
+              <div>
+                <div className="font-medium">Ajuda</div>
+                <div className="mt-2">Suporte • Termos • Contato</div>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+}
+
+/* ---------- Subcomponents ---------- */
+function FeatureCard({ title, desc }) {
+  return (
+    <div className="border rounded-2xl p-6 text-center shadow-sm">
+      <div className="text-4xl mb-4">⭐</div>
+      <h4 className="font-semibold">{title}</h4>
+      <p className="mt-2 text-sm text-slate-600">{desc}</p>
+    </div>
+  );
+}
+
+function Step({ number, title, desc }) {
+  return (
+    <div className="text-center">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border text-xl font-semibold">{number}</div>
+      <h5 className="mt-4 font-medium">{title}</h5>
+      <p className="mt-2 text-sm text-slate-600">{desc}</p>
+    </div>
+  );
+}
+
+function PriceCalculator() {
+  const divisions = ["IV", "III", "II", "I"];
+  const tiers = [
+    { name: "Ferro", price: 7, divisions },
+    { name: "Bronze", price: 8, divisions },
+    { name: "Prata", price: 10, divisions },
+    { name: "Ouro", price: 15, divisions },
+    { name: "Platina", price: 20, divisions },
+    { name: "Esmeralda", price: 35, divisions },
+    { name: "Diamante", price: 70, divisions },
+    { name: "Mestre", price: 0, divisions: [] },
+    { name: "Grão Mestre", price: 500, divisions: [] },
+    { name: "Desafiante", price: 1000, divisions: [] },
+  ];
+
+  const [currentTier, setCurrentTier] = useState("Ferro");
+  const [currentDiv, setCurrentDiv] = useState("IV");
+  const [desiredTier, setDesiredTier] = useState("Bronze");
+  const [desiredDiv, setDesiredDiv] = useState("IV");
+  const [price, setPrice] = useState(null);
+  const [breakdown, setBreakdown] = useState([]);
+
+  const calculatePrice = () => {
+    let startIndex = tiers.findIndex(t => t.name === currentTier);
+    let endIndex = tiers.findIndex(t => t.name === desiredTier);
+
+    if (startIndex > endIndex || (startIndex === endIndex && divisions.indexOf(currentDiv) <= divisions.indexOf(desiredDiv))) {
+      setPrice(0);
+      setBreakdown(["Seleção inválida"]);
+      return;
+    }
+
+    let total = 0;
+    let details = [];
+
+    for (let i = startIndex; i <= endIndex; i++) {
+      let tier = tiers[i];
+      if (tier.divisions.length > 0) {
+        let startDiv = i === startIndex ? divisions.indexOf(currentDiv) : 0;
+        let endDiv = i === endIndex ? divisions.indexOf(desiredDiv) : divisions.length - 1;
+
+        for (let d = startDiv; d <= endDiv; d++) {
+          total += tier.price;
+          details.push(`${tier.name} ${divisions[d]} → R$${tier.price}`);
+        }
+      } else {
+        // Mestre, Grão Mestre, Desafiante
+        if (tier.name === "Grão Mestre") {
+          total += 500;
+          details.push("Grão Mestre → R$500");
+        } else if (tier.name === "Desafiante") {
+          total += 1000;
+          details.push("Desafiante → R$1000");
+        } else {
+          details.push("Mestre (preço sob consulta)");
+        }
+      }
+    }
+
+    if (total > 2500) {
+      details.push("Subtotal excedeu R$2500, aplicando limite.");
+      total = 2500;
+    }
+
+    setPrice(total);
+    setBreakdown(details);
+  };
+
+  return (
+    <div className="border rounded-2xl p-6 shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium">Tier Atual</label>
+          <select value={currentTier} onChange={e => setCurrentTier(e.target.value)} className="mt-1 w-full border rounded px-3 py-2">
+            {tiers.map(t => <option key={t.name}>{t.name}</option>)}
+          </select>
+          {tiers.find(t => t.name === currentTier).divisions.length > 0 && (
+            <select value={currentDiv} onChange={e => setCurrentDiv(e.target.value)} className="mt-2 w-full border rounded px-3 py-2">
+              {divisions.map(d => <option key={d}>{d}</option>)}
+            </select>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium">Tier Desejado</label>
+          <select value={desiredTier} onChange={e => setDesiredTier(e.target.value)} className="mt-1 w-full border rounded px-3 py-2">
+            {tiers.map(t => <option key={t.name}>{t.name}</option>)}
+          </select>
+          {tiers.find(t => t.name === desiredTier).divisions.length > 0 && (
+            <select value={desiredDiv} onChange={e => setDesiredDiv(e.target.value)} className="mt-2 w-full border rounded px-3 py-2">
+              {divisions.map(d => <option key={d}>{d}</option>)}
+            </select>
+          )}
+        </div>
+      </div>
+
+      <button onClick={calculatePrice} className="mt-6 w-full rounded-full bg-black text-white px-4 py-2 font-semibold">Calcular Preço</button>
+
+      {price !== null && (
+        <div className="mt-4 text-center">
+          <div className="text-xl font-bold">Total: R$ {price}</div>
+          <ul className="mt-3 text-sm text-slate-600 space-y-1 text-left">
+            {breakdown.map((b, i) => <li key={i}>• {b}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
