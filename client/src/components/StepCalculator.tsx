@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Circle, ArrowRight } from "lucide-react";
+import { CheckCircle, Circle, ArrowRight, Clapperboard, FileText, Users } from "lucide-react";
 
 // Import real League of Legends rank images
 import ironRank from "@assets/Season_2022_-_Iron_1757959424037.png";
@@ -36,9 +36,9 @@ export default function StepCalculator() {
   const [currentDiv, setCurrentDiv] = useState("");
   const [desiredTier, setDesiredTier] = useState("");
   const [desiredDiv, setDesiredDiv] = useState("");
-  const [includeCoaching, setIncludeCoaching] = useState(false);
-  const [includeReplay, setIncludeReplay] = useState(false);
-  const [duoQueue, setDuoQueue] = useState(false);
+  const [watchGames, setWatchGames] = useState(false);
+  const [gameReport, setGameReport] = useState(false);
+  const [duoBoost, setDuoBoost] = useState(false);
   const [price, setPrice] = useState<number | null>(null);
   const [breakdown, setBreakdown] = useState<string[]>([]);
 
@@ -58,14 +58,12 @@ export default function StepCalculator() {
         const startDivIndex = divisions.indexOf(currentDiv);
         const endDivIndex = divisions.indexOf(desiredDiv);
         
-        // Check if valid progression (IV -> III -> II -> I, ou seja, índice crescente)
         if (startDivIndex >= endDivIndex) {
           setPrice(0);
           setBreakdown(["Seleção inválida: precisa selecionar uma divisão maior"]);
           return;
         }
         
-        // Calculate divisions within same tier
         const divisionCount = endDivIndex - startDivIndex;
         total = tier.price * divisionCount;
         details.push(`${tier.name} ${currentDiv} → ${tier.name} ${desiredDiv}: ${divisionCount} divisões × R$${tier.price} = R$${total}`);
@@ -75,46 +73,40 @@ export default function StepCalculator() {
         return;
       }
     } else {
-      // Different tiers
       if (startTierIndex >= endTierIndex) {
         setPrice(0);
         setBreakdown(["Seleção inválida: precisa selecionar um tier maior"]);
         return;
       }
 
-      // Calculate from current tier to end of current tier
       const currentTierData = tiers[startTierIndex];
       if (currentTierData.divisions.length > 0) {
         const startDivIndex = divisions.indexOf(currentDiv);
-        const divisionsToComplete = (divisions.length - 1) - startDivIndex + 1; // +1 para incluir promoção
+        const divisionsToComplete = (divisions.length - 1) - startDivIndex + 1;
         total += currentTierData.price * divisionsToComplete;
         details.push(`${currentTierData.name} ${currentDiv} → ${currentTierData.name} I + Promoção: ${divisionsToComplete} × R$${currentTierData.price} = R$${currentTierData.price * divisionsToComplete}`);
       }
 
-      // Calculate intermediate full tiers
       for (let i = startTierIndex + 1; i < endTierIndex; i++) {
         const tier = tiers[i];
         if (tier.divisions.length > 0) {
-          const fullTierCost = tier.price * 4; // 4 divisions per tier
+          const fullTierCost = tier.price * 4;
           total += fullTierCost;
           details.push(`${tier.name} completo: 4 divisões × R$${tier.price} = R$${fullTierCost}`);
         } else {
-          // Special tiers like Master
           if (tier.name === "Mestre") {
             details.push("Mestre (preço sob consulta)");
           }
         }
       }
 
-      // Calculate to desired division in target tier
       const targetTierData = tiers[endTierIndex];
       if (targetTierData.divisions.length > 0) {
         const endDivIndex = divisions.indexOf(desiredDiv);
-        const divisionsInTarget = endDivIndex + 1; // Do IV até a divisão desejada
+        const divisionsInTarget = endDivIndex + 1;
         total += targetTierData.price * divisionsInTarget;
         details.push(`${targetTierData.name} IV → ${targetTierData.name} ${desiredDiv}: ${divisionsInTarget} × R$${targetTierData.price} = R$${targetTierData.price * divisionsInTarget}`);
       } else {
-        // Special handling for Master+
         if (targetTierData.name === "Grão Mestre") {
           total += 500;
           details.push("Grão Mestre → R$500");
@@ -125,19 +117,19 @@ export default function StepCalculator() {
       }
     }
 
-    // Add extras
     let extraCost = 0;
-    if (includeCoaching) {
-      extraCost += Math.ceil(total * 0.3);
-      details.push(`Coaching (+30%): R$${Math.ceil(total * 0.3)}`);
+    if (watchGames) {
+      extraCost += 30;
+      details.push(`Assista aos jogos: +R$30`);
     }
-    if (includeReplay) {
+    if (gameReport) {
       extraCost += 25;
-      details.push("Replay das partidas: R$25");
+      details.push("Relatório de jogo: +R$25");
     }
-    if (duoQueue) {
-      extraCost += Math.ceil(total * 0.2);
-      details.push(`Duo Queue (+20%): R$${Math.ceil(total * 0.2)}`);
+    if (duoBoost) {
+      const duoCost = Math.ceil(total * 0.2);
+      extraCost += duoCost;
+      details.push(`Duo Boost (+20%): +R$${duoCost}`);
     }
 
     total += extraCost;
@@ -153,10 +145,10 @@ export default function StepCalculator() {
   };
 
   const steps = [
-    { number: 1, title: "Rank Atual", completed: currentTier && currentDiv },
-    { number: 2, title: "Rank Desejado", completed: desiredTier && desiredDiv },
+    { number: 1, title: "Rank Atual", completed: !!(currentTier && (tiers.find(t => t.name === currentTier)?.divisions.length === 0 || currentDiv)) },
+    { number: 2, title: "Rank Desejado", completed: !!(desiredTier && (tiers.find(t => t.name === desiredTier)?.divisions.length === 0 || desiredDiv)) },
     { number: 3, title: "Serviços Extras", completed: true },
-    { number: 4, title: "Revisar", completed: currentTier && desiredTier },
+    { number: 4, title: "Revisar", completed: !!(currentTier && desiredTier) },
     { number: 5, title: "Resultado", completed: price !== null }
   ];
 
@@ -164,11 +156,11 @@ export default function StepCalculator() {
   const desiredTierData = tiers.find(t => t.name === desiredTier);
 
   const renderStepIndicator = () => (
-    <div className="flex items-center justify-center mb-8">
+    <div className="flex items-center justify-center mb-8 flex-wrap">
       {steps.map((step, index) => (
-        <div key={step.number} className="flex items-center">
+        <div key={step.number} className="flex items-center p-2">
           <div 
-            className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${
+            className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
               currentStep === step.number 
                 ? 'border-foreground bg-foreground text-background' 
                 : step.completed 
@@ -177,16 +169,16 @@ export default function StepCalculator() {
             }`}
           >
             {step.completed && currentStep !== step.number ? (
-              <CheckCircle className="w-6 h-6" />
+              <CheckCircle className="w-5 h-5" />
             ) : (
-              <span className="font-bold">{step.number}</span>
+              <span className="font-bold text-sm">{step.number}</span>
             )}
           </div>
-          <div className="ml-2 text-sm font-medium">
+          <div className="ml-2 text-sm font-medium hidden sm:block">
             {step.title}
           </div>
           {index < steps.length - 1 && (
-            <ArrowRight className="mx-4 w-4 h-4 text-muted-foreground" />
+            <ArrowRight className="mx-2 sm:mx-4 w-4 h-4 text-muted-foreground" />
           )}
         </div>
       ))}
@@ -202,7 +194,7 @@ export default function StepCalculator() {
         </p>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -212,7 +204,7 @@ export default function StepCalculator() {
               onClick={() => {
                 setCurrentTier(tier.name);
                 if (tier.divisions.length === 0) {
-                  setCurrentDiv("");
+                  setCurrentDiv("I");
                 } else if (!currentDiv) {
                   setCurrentDiv("IV");
                 }
@@ -226,7 +218,7 @@ export default function StepCalculator() {
                   className="w-16 h-16 mx-auto object-contain"
                 />
                 <div className="font-medium text-sm">{tier.name}</div>
-                <div className="text-xs text-muted-foreground">R${tier.price}/div</div>
+                {tier.price > 0 && <div className="text-xs text-muted-foreground">R${tier.price}/div</div>}
               </div>
             </div>
           ))}
@@ -256,7 +248,7 @@ export default function StepCalculator() {
           <Button 
             size="lg" 
             onClick={() => setCurrentStep(2)}
-            disabled={!currentTier || (currentTierData?.divisions && currentTierData.divisions.length > 0 && !currentDiv)}
+            disabled={!steps[0].completed}
             className="px-12 py-6 text-lg"
             data-testid="button-next-step1"
           >
@@ -276,7 +268,7 @@ export default function StepCalculator() {
         </p>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -286,7 +278,7 @@ export default function StepCalculator() {
               onClick={() => {
                 setDesiredTier(tier.name);
                 if (tier.divisions.length === 0) {
-                  setDesiredDiv("");
+                  setDesiredDiv("I");
                 } else if (!desiredDiv) {
                   setDesiredDiv("IV");
                 }
@@ -300,7 +292,7 @@ export default function StepCalculator() {
                   className="w-16 h-16 mx-auto object-contain"
                 />
                 <div className="font-medium text-sm">{tier.name}</div>
-                <div className="text-xs text-muted-foreground">R${tier.price}/div</div>
+                {tier.price > 0 && <div className="text-xs text-muted-foreground">R${tier.price}/div</div>}
               </div>
             </div>
           ))}
@@ -339,7 +331,7 @@ export default function StepCalculator() {
           <Button 
             size="lg" 
             onClick={() => setCurrentStep(3)}
-            disabled={!desiredTier || (desiredTierData?.divisions && desiredTierData.divisions.length > 0 && !desiredDiv)}
+            disabled={!steps[1].completed}
             className="px-12 py-6 text-lg"
             data-testid="button-next-step2"
           >
@@ -361,53 +353,59 @@ export default function StepCalculator() {
       <CardContent className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div 
-            className={`p-6 border rounded-lg cursor-pointer hover-elevate transition-all ${
-              includeCoaching ? 'border-foreground bg-muted' : 'border-border'
+            className={`p-6 border rounded-lg cursor-pointer hover-elevate transition-all flex flex-col h-full ${
+              watchGames ? 'border-foreground bg-muted' : 'border-border'
             }`}
-            onClick={() => setIncludeCoaching(!includeCoaching)}
-            data-testid="service-coaching"
+            onClick={() => setWatchGames(!watchGames)}
+            data-testid="service-watch-games"
           >
-            <div className="text-center space-y-4">
-              <div className="text-3xl">🎯</div>
-              <h3 className="font-semibold text-lg">Coaching</h3>
+            <div className="text-center space-y-4 flex-grow">
+              <Clapperboard className="mx-auto w-8 h-8 text-foreground" />
+              <h3 className="font-semibold text-lg">Assista aos jogos</h3>
               <p className="text-sm text-muted-foreground">
-                Orientação durante as partidas para você aprender enquanto sobe
+                Receba links para assistir às partidas do seu booster ao vivo.
               </p>
-              <Badge variant={includeCoaching ? "default" : "outline"}>+30%</Badge>
+            </div>
+            <div className="mt-4">
+              <Badge variant={watchGames ? "default" : "outline"}>+R$30</Badge>
             </div>
           </div>
 
           <div 
-            className={`p-6 border rounded-lg cursor-pointer hover-elevate transition-all ${
-              includeReplay ? 'border-foreground bg-muted' : 'border-border'
+            className={`p-6 border rounded-lg cursor-pointer hover-elevate transition-all flex flex-col h-full ${
+              gameReport ? 'border-foreground bg-muted' : 'border-border'
             }`}
-            onClick={() => setIncludeReplay(!includeReplay)}
-            data-testid="service-replay"
+            onClick={() => setGameReport(!gameReport)}
+            data-testid="service-game-report"
           >
-            <div className="text-center space-y-4">
-              <div className="text-3xl">📹</div>
-              <h3 className="font-semibold text-lg">Replay</h3>
+            <div className="text-center space-y-4 flex-grow">
+              <FileText className="mx-auto w-8 h-8 text-foreground" />
+              <h3 className="font-semibold text-lg">Relatório de jogo</h3>
               <p className="text-sm text-muted-foreground">
-                Gravações de todas as partidas para você revisar posteriormente
+                Análise detalhada do desempenho e pontos de melhoria.
               </p>
-              <Badge variant={includeReplay ? "default" : "outline"}>+R$25</Badge>
+            </div>
+            <div className="mt-4">
+              <Badge variant={gameReport ? "default" : "outline"}>+R$25</Badge>
             </div>
           </div>
 
           <div 
-            className={`p-6 border rounded-lg cursor-pointer hover-elevate transition-all ${
-              duoQueue ? 'border-foreground bg-muted' : 'border-border'
+            className={`p-6 border rounded-lg cursor-pointer hover-elevate transition-all flex flex-col h-full ${
+              duoBoost ? 'border-foreground bg-muted' : 'border-border'
             }`}
-            onClick={() => setDuoQueue(!duoQueue)}
-            data-testid="service-duo"
+            onClick={() => setDuoBoost(!duoBoost)}
+            data-testid="service-duo-boost"
           >
-            <div className="text-center space-y-4">
-              <div className="text-3xl">👥</div>
-              <h3 className="font-semibold text-lg">Duo Queue</h3>
+            <div className="text-center space-y-4 flex-grow">
+              <Users className="mx-auto w-8 h-8 text-foreground" />
+              <h3 className="font-semibold text-lg">Duo Boost</h3>
               <p className="text-sm text-muted-foreground">
-                Jogue junto com o booster para aprender in-game
+                Jogue junto com o booster para uma experiência de aprendizado em tempo real.
               </p>
-              <Badge variant={duoQueue ? "default" : "outline"}>+20%</Badge>
+            </div>
+            <div className="mt-4">
+              <Badge variant={duoBoost ? "default" : "outline"}>+20%</Badge>
             </div>
           </div>
         </div>
@@ -457,7 +455,7 @@ export default function StepCalculator() {
               )}
               <div>
                 <div className="font-medium">{currentTier}</div>
-                {currentDiv && <div className="text-sm text-muted-foreground">Divisão {currentDiv}</div>}
+                {currentDiv && currentTierData?.divisions.length > 0 && <div className="text-sm text-muted-foreground">Divisão {currentDiv}</div>}
               </div>
             </div>
           </div>
@@ -474,19 +472,19 @@ export default function StepCalculator() {
               )}
               <div>
                 <div className="font-medium">{desiredTier}</div>
-                {desiredDiv && <div className="text-sm text-muted-foreground">Divisão {desiredDiv}</div>}
+                {desiredDiv && desiredTierData?.divisions.length > 0 && <div className="text-sm text-muted-foreground">Divisão {desiredDiv}</div>}
               </div>
             </div>
           </div>
         </div>
 
-        {(includeCoaching || includeReplay || duoQueue) && (
+        {(watchGames || gameReport || duoBoost) && (
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Serviços Extras</h3>
             <div className="flex flex-wrap gap-2">
-              {includeCoaching && <Badge variant="default">Coaching (+30%)</Badge>}
-              {includeReplay && <Badge variant="default">Replay (+R$25)</Badge>}
-              {duoQueue && <Badge variant="default">Duo Queue (+20%)</Badge>}
+              {watchGames && <Badge variant="default">Assista aos jogos (+R$30)</Badge>}
+              {gameReport && <Badge variant="default">Relatório de jogo (+R$25)</Badge>}
+              {duoBoost && <Badge variant="default">Duo Boost (+20%)</Badge>}
             </div>
           </div>
         )}
@@ -553,6 +551,13 @@ export default function StepCalculator() {
               setCurrentStep(1);
               setPrice(null);
               setBreakdown([]);
+              setCurrentTier("");
+              setCurrentDiv("");
+              setDesiredTier("");
+              setDesiredDiv("");
+              setWatchGames(false);
+              setGameReport(false);
+              setDuoBoost(false);
             }}
             className="px-12 py-6 text-lg"
             data-testid="button-new-calculation"
@@ -565,7 +570,7 @@ export default function StepCalculator() {
             className="px-12 py-6 text-lg"
             data-testid="button-contact"
           >
-            Entrar em Contato
+            Finalizar Pedido
           </Button>
         </div>
       </CardContent>
@@ -576,7 +581,7 @@ export default function StepCalculator() {
     <section id="calculator" className="py-16">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center space-y-4 mb-12">
-          <h3 className="text-4xl font-bold">Calculadora de Preços</h3>
+          <h3 className="text-4xl font-bold">Selecione as divisões e conclua seu pedido</h3>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Descubra o valor do seu elojob em apenas algumas etapas. 
             Processo simples e transparente.

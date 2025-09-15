@@ -1,21 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import heroImage from "@assets/generated_images/League_of_Legends_gameplay_hero_410af987.png";
+import { useLocation } from "wouter";
 
 export default function Hero() {
+  const [, setLocation] = useLocation();
+
+  const handleOrderClick = () => {
+    setLocation("/order");
+  };
+
+  const handleHowItWorksClick = () => {
+    const element = document.getElementById("how");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      setLocation("/#how");
+    }
+  };
+
   return (
     <main className="max-w-6xl mx-auto px-6 pt-6">
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12">
         <div className="space-y-8">
           <div className="space-y-6">
-            <h1 className="text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
-              Elojob profissional. 
-              <span className="block">Rápido. Seguro.</span>
-              <span className="block">Softrank.</span>
-            </h1>
+            <div className="text-6xl lg:text-7xl font-bold tracking-tighter bg-foreground text-background px-6 py-3 rounded-lg inline-block">
+              SOFTRANK
+            </div>
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
-              Serviço premium de Elojob para League of Legends — profissionais verificados, 
-              progresso garantido e suporte 24/7. Em breve: todos os jogos.
+              Somos a maior plataforma de game ranking do mundo, presentes em 52 países.
             </p>
           </div>
 
@@ -24,6 +36,7 @@ export default function Hero() {
               size="lg" 
               className="rounded-full text-base font-semibold px-8 py-6"
               data-testid="button-cta-primary"
+              onClick={handleOrderClick}
             >
               Quero subir de elo
             </Button>
@@ -32,6 +45,7 @@ export default function Hero() {
               size="lg" 
               className="rounded-full text-base font-semibold px-8 py-6"
               data-testid="button-cta-secondary"
+              onClick={handleHowItWorksClick}
             >
               Como funciona
             </Button>
@@ -85,6 +99,7 @@ export default function Hero() {
                   <Button 
                     className="rounded-full font-semibold px-6"
                     data-testid="button-order-example"
+                    onClick={handleOrderClick}
                   >
                     Pedir agora
                   </Button>

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Clapperboard, FileText, Users } from "lucide-react";
 
 // Import real League of Legends rank images
 import ironRank from "@assets/Season_2022_-_Iron_1757959424037.png";
@@ -46,9 +47,9 @@ export default function OrderCalculator() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
-  const [includeCoaching, setIncludeCoaching] = useState(false);
-  const [includeReplay, setIncludeReplay] = useState(false);
-  const [duoQueue, setDuoQueue] = useState(false);
+  const [watchGames, setWatchGames] = useState(false);
+  const [gameReport, setGameReport] = useState(false);
+  const [duoBoost, setDuoBoost] = useState(false);
 
   const calculatePrice = () => {
     console.log('Calculating price...'); // todo: remove mock functionality
@@ -135,17 +136,17 @@ export default function OrderCalculator() {
 
     // Add extras
     let extraCost = 0;
-    if (includeCoaching) {
-      extraCost += Math.ceil(total * 0.3);
-      details.push(`Coaching (+30%): R$${Math.ceil(total * 0.3)}`);
+    if (watchGames) {
+      extraCost += 30;
+      details.push(`Assista aos jogos: +R$30`);
     }
-    if (includeReplay) {
+    if (gameReport) {
       extraCost += 25;
-      details.push("Replay das partidas: R$25");
+      details.push("Relatório de jogo: +R$25");
     }
-    if (duoQueue) {
+    if (duoBoost) {
       extraCost += Math.ceil(total * 0.2);
-      details.push(`Duo Queue (+20%): R$${Math.ceil(total * 0.2)}`);
+      details.push(`Duo Boost (+20%): +R$${Math.ceil(total * 0.2)}`);
     }
 
     total += extraCost;
@@ -168,9 +169,9 @@ export default function OrderCalculator() {
       desiredTier,
       desiredDiv,
       price,
-      includeCoaching,
-      includeReplay,
-      duoQueue,
+      watchGames,
+      gameReport,
+      duoBoost,
       notes
     });
     alert('Pedido enviado com sucesso! Você receberá um email com as instruções de pagamento.');
@@ -287,35 +288,35 @@ export default function OrderCalculator() {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
                     <Checkbox 
-                      id="coaching" 
-                      checked={includeCoaching}
-                      onCheckedChange={(checked) => setIncludeCoaching(checked === true)}
-                      data-testid="checkbox-coaching"
+                      id="watchGames" 
+                      checked={watchGames}
+                      onCheckedChange={(checked) => setWatchGames(checked === true)}
+                      data-testid="checkbox-watch-games"
                     />
-                    <Label htmlFor="coaching" className="text-sm">
-                      Coaching durante as partidas (+30%)
+                    <Label htmlFor="watchGames" className="text-sm font-normal flex items-center gap-2">
+                      <Clapperboard className="w-4 h-4" /> Assista aos jogos (+R$30)
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox 
-                      id="replay" 
-                      checked={includeReplay}
-                      onCheckedChange={(checked) => setIncludeReplay(checked === true)}
-                      data-testid="checkbox-replay"
+                      id="gameReport" 
+                      checked={gameReport}
+                      onCheckedChange={(checked) => setGameReport(checked === true)}
+                      data-testid="checkbox-game-report"
                     />
-                    <Label htmlFor="replay" className="text-sm">
-                      Replay das partidas (+R$25)
+                    <Label htmlFor="gameReport" className="text-sm font-normal flex items-center gap-2">
+                      <FileText className="w-4 h-4" /> Relatório de jogo (+R$25)
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Checkbox 
-                      id="duo" 
-                      checked={duoQueue}
-                      onCheckedChange={(checked) => setDuoQueue(checked === true)}
-                      data-testid="checkbox-duo"
+                      id="duoBoost" 
+                      checked={duoBoost}
+                      onCheckedChange={(checked) => setDuoBoost(checked === true)}
+                      data-testid="checkbox-duo-boost"
                     />
-                    <Label htmlFor="duo" className="text-sm">
-                      Duo Queue (+20%)
+                    <Label htmlFor="duoBoost" className="text-sm font-normal flex items-center gap-2">
+                      <Users className="w-4 h-4" /> Duo Boost (+20%)
                     </Label>
                   </div>
                 </div>
