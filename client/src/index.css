@@ -272,11 +272,4 @@
   }
 }
 
-/* Custom cursor styles */
-* {
-  cursor: none !important;
-}
 
-a, button, input, textarea, select, [role="button"], [role="link"] {
-  cursor: none !important;
-}
