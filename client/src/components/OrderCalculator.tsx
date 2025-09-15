@@ -7,17 +7,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
-// Import rank images
-import ironRank from "@assets/generated_images/LoL_Iron_rank_emblem_f88bef98.png";
-import bronzeRank from "@assets/generated_images/LoL_Bronze_rank_emblem_13b32f7b.png";
-import silverRank from "@assets/generated_images/LoL_Silver_rank_emblem_01e35c5b.png";
-import goldRank from "@assets/generated_images/LoL_Gold_rank_emblem_f3e5d118.png";
-import platinumRank from "@assets/generated_images/LoL_Platinum_rank_emblem_1d1d2f91.png";
-import emeraldRank from "@assets/generated_images/LoL_Emerald_rank_emblem_e48d428b.png";
-import diamondRank from "@assets/generated_images/LoL_Diamond_rank_emblem_9c97aba3.png";
-import masterRank from "@assets/generated_images/LoL_Master_rank_emblem_334d9066.png";
-import grandmasterRank from "@assets/generated_images/LoL_Grandmaster_rank_emblem_78ba1f84.png";
-import challengerRank from "@assets/generated_images/LoL_Challenger_rank_emblem_bbd9b1b2.png";
+// Import real League of Legends rank images
+import ironRank from "@assets/Season_2022_-_Iron_1757959424037.png";
+import bronzeRank from "@assets/Season_2022_-_Bronze_1757959424032.png";
+import silverRank from "@assets/Season_2022_-_Silver_1757959424031.png";
+import goldRank from "@assets/Season_2022_-_Gold_1757959424036.png";
+import platinumRank from "@assets/Season_2022_-_Platinum_1757959424033.png";
+import emeraldRank from "@assets/Esmeralda_1757959424030.png";
+import diamondRank from "@assets/Season_2022_-_Diamond_1757959424035.png";
+import masterRank from "@assets/Season_2022_-_Master_1757959424034.png";
+import grandmasterRank from "@assets/Season_2022_-_Grandmaster_1757959424035.png";
+import challengerRank from "@assets/Season_2022_-_Challenger_1757959424033.png";
 
 export default function OrderCalculator() {
   const divisions = ["IV", "III", "II", "I"];
